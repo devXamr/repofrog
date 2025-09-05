@@ -1,12 +1,14 @@
 'use client'
 import Image from "next/image";
+import axios from "axios";
 import { useState } from "react";
 
 export default function Home() {
   const [repoURL, setRepoURL] = useState('')
+  const [fileTree, setFileTree] = useState()
 
 
-  function handleURLSubmit(){
+  async function handleURLSubmit(){
     // fetch details from github url here.
     console.log("This URL is being sent by the user:", repoURL)
     const url = new URL(repoURL)
@@ -15,6 +17,14 @@ export default function Home() {
     const repoName = url.pathname.split('/')[2]
     console.log('Repo name:', repoName)
 
+    const repoData = await axios.get(`https://api.github.com/repos/${ownerName}/${repoName}`)
+
+    console.log("Data returned from github (Repo Metadata)", repoData)
+
+    const recursiveFileTree = await axios.get(`https://api.github.com/repos/${ownerName}/${repoName}/git/trees/main?recursive=1`)
+
+    console.log("Returned file tree (branch main): ", recursiveFileTree.data.tree)
+    setFileTree(recursiveFileTree.data.tree)
     setRepoURL('')
   }
 
@@ -32,6 +42,13 @@ export default function Home() {
 
 
       </form>
+
+
+      <div>
+        {fileTree && fileTree.map(each => <div>{each.path}</div>)}
+      </div>
     </div>
   );
 }
+
+
