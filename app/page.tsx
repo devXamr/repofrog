@@ -9,6 +9,11 @@ export default function Home() {
   function handleURLSubmit(){
     // fetch details from github url here.
     console.log("This URL is being sent by the user:", repoURL)
+    const url = new URL(repoURL)
+    const ownerName = url.pathname.split('/')[1]
+    console.log("Owner name:", ownerName)
+    const repoName = url.pathname.split('/')[2]
+    console.log('Repo name:', repoName)
 
     setRepoURL('')
   }
