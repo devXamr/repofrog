@@ -2,10 +2,19 @@
 import Image from "next/image";
 import axios from "axios";
 import { useState } from "react";
+import { buildFileTree } from "./utils";
+
+import FileTree from "@/components/file-tree-own";
+
+
 
 export default function Home() {
   const [repoURL, setRepoURL] = useState('')
   const [fileTree, setFileTree] = useState()
+
+
+
+
 
 
   async function handleURLSubmit(){
@@ -24,7 +33,11 @@ export default function Home() {
     const recursiveFileTree = await axios.get(`https://api.github.com/repos/${ownerName}/${repoName}/git/trees/main?recursive=1`)
 
     console.log("Returned file tree (branch main): ", recursiveFileTree.data.tree)
-    setFileTree(recursiveFileTree.data.tree)
+
+    const formattedTree = buildFileTree(recursiveFileTree.data.tree)
+
+    console.log("This is the formatted tree", formattedTree)
+    setFileTree(formattedTree)
     setRepoURL('')
   }
 
@@ -46,6 +59,12 @@ export default function Home() {
 
       <div>
         {fileTree && fileTree.map(each => <div>{each.path}</div>)}
+
+        {fileTree && <FileTree
+  elements={fileTree} // output of buildFileTree
+  onSelect={(node) => {console.log("Some element has been selected", node)}}
+/>}
+
       </div>
     </div>
   );
