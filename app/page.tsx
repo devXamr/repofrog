@@ -169,54 +169,6 @@ export default function Home() {
           </ResizablePanelGroup>
         )}
       </div>
-
-      {/* <div>
-
-        {fileTree && 
-        
-        
-        <div className="flex">
-
-           // this is resizable 1
-          <div className='max-w-[20%] w-[15%] sticky top-10 h-fit'>
-          <FileTree
-  elements={fileTree} // output of buildFileTree
-  onSelect={(node: any) => handleSelect(node)}
-/>        
-        </div>
-
-
-// this will be resizable 2
-<div className='border mx-2 rounded-md w-[58%]'>
-
-      {!content && <div className='text-center text-lg mt-20'>Select a file to be opened here.</div>}
-
-        {content && <SyntaxHighlighter language="typescript" style={oneDark} className='w-full h-full'>
-              {content}
-          </SyntaxHighlighter>}
-</div>
-
-
-// this will be resizable 3
-<div className='border absolute right-0 top-0 w-[400px] h-screen shadow-md border'>
-    <div>
-      <div className="px-4 py-4 w-2/3 bg-gray-100 rounded-xl mx-2">Hey there! Ask me anything you want about this repo.</div>
-      This will be the chat window
-      </div>
-</div>
-
-<div>
-
-  <input type="text" className='border z-10 relative'/>
-</div>
-
-</div>} 
-
-
-
-      </div>
-
-      */}
     </div>
   );
 }
