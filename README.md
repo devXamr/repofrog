@@ -1,36 +1,77 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+![image](https://hackmd.io/_uploads/HJvM6cpqxl.png)
 
-## Getting Started
+# 🐸 RepoFrog
 
-First, run the development server:
+RepoFrog is an early work-in-progress tool for exploring GitHub repositories in a more interactive way.  
+The vision is to make repositories easier to navigate, understand, and annotate — whether you’re learning, researching, or building.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🚀 What RepoFrog Does (WIP)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Right now (v1, in progress), RepoFrog lets you:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Log in and view **any public GitHub repository**
+- Browse through the **file tree** in a clean UI
+- Select specific files or folders for focused exploration
+- Ask questions about the repo (planned integration)
+- Start experimenting with saving notes and insights (coming soon)
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🗺️ Roadmap
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Here’s what’s next on the journey:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Near-term goals
 
-## Deploy on Vercel
+- ✅ Public repo exploration
+- 🛠️ Improved file tree navigation
+- 🛠️ Display file contents cleanly
+- 🛠️ Ability to query/explain selected parts
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Next big step (Authenticated Version)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- 🔒 Support for **private repositories**
+- ✍️ Built-in **note-taking** to save context and learning
+- 🎨 Popular **themes & UX improvements**
+- 🗂️ Organize repositories and notes in your account
+
+### Future ideas
+
+- 🔍 Smart search across repos
+- 🧑‍🤝‍🧑 Sharing annotated repos with teammates
+- 🧠 AI-assisted repo summaries and deep-dive Q&A
+- 📚 Learning mode (tutorial-style navigation for open-source projects)
+
+---
+
+## 💡 Why RepoFrog?
+
+GitHub is powerful, but often overwhelming. RepoFrog aims to give you:
+
+- A **focused view** of the parts that matter
+- A place to **save your thoughts** alongside code
+- An **interactive experience** that makes learning from repos smoother
+
+---
+
+## 🛠️ Development Status
+
+This project is in **very early development (pre-alpha)**.  
+Expect rapid changes, missing features, and rough edges. Feedback and ideas are very welcome!
+
+---
+
+## 🐸 Contributing
+
+RepoFrog is not open to contributions yet (since it’s in heavy WIP).  
+Once the foundation is stable, contribution guidelines will be published here.
+
+---
+
+## 📜 License
+
+TBD (not finalized yet).
+
+---
