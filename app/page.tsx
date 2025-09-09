@@ -1,14 +1,12 @@
 "use client";
-import Image from "next/image";
 import axios from "axios";
 import { useState } from "react";
 import { buildFileTree } from "./utils";
 
-import FileTree from "@/components/file-tree-own";
+import FileTree, { nodeType } from "@/components/file-tree-own";
 
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { ACTION_UNHANDLED_ERROR } from "next/dist/next-devtools/dev-overlay/shared";
 import {
   ResizableHandle,
   ResizablePanel,
@@ -18,7 +16,7 @@ import { Settings, X } from "lucide-react";
 
 export default function Home() {
   const [repoURL, setRepoURL] = useState("");
-  const [fileTree, setFileTree] = useState();
+  const [fileTree, setFileTree] = useState<nodeType[] | undefined>(undefined);
   const [content, setContent] = useState("");
   const [ownerName, setOwnerName] = useState("");
   const [repoName, setRepoName] = useState("");
@@ -59,7 +57,7 @@ export default function Home() {
     setRepoURL("");
   }
 
-  async function handleSelect(file: any) {
+  async function handleSelect(file: nodeType) {
     console.log("Some element has been selected:", file);
 
     // only fetch if it's a file (GitHub marks them as blob)
@@ -137,7 +135,7 @@ export default function Home() {
               <div className="w-full">
                 <FileTree
                   elements={fileTree} // output of buildFileTree
-                  onSelect={(node: any) => handleSelect(node)}
+                  onSelect={(node: nodeType) => handleSelect(node)}
                 />
               </div>
             </ResizablePanel>
