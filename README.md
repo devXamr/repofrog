@@ -1,4 +1,4 @@
-![image](public/repofrog.png)
+![image](public/repofroglogo.png)
 
 # 🐸 RepoFrog
 
