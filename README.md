@@ -1,4 +1,4 @@
-![image](https://hackmd.io/_uploads/HJvM6cpqxl.png)
+![image](public/repofrog.png)
 
 # 🐸 RepoFrog
 
