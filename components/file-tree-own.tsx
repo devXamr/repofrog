@@ -8,7 +8,7 @@ function FileNode({ node, onSelect }) {
   const isFolder = !!node.children
 
   return (
-    <div className={`ml-2 border-l`}>
+    <div className={`ml-2 border-bl`}>
       <div
         className="cursor-pointer px-2 py-1 flex items-center space-x-1 bg-gray-100"
         onClick={() => {

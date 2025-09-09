@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import Image from "next/image";
 import axios from "axios";
 import { useState } from "react";
@@ -6,68 +6,211 @@ import { buildFileTree } from "./utils";
 
 import FileTree from "@/components/file-tree-own";
 
-
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { ACTION_UNHANDLED_ERROR } from "next/dist/next-devtools/dev-overlay/shared";
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "@/components/ui/resizable";
 
 export default function Home() {
-  const [repoURL, setRepoURL] = useState('')
-  const [fileTree, setFileTree] = useState()
+  const [repoURL, setRepoURL] = useState("");
+  const [fileTree, setFileTree] = useState();
+  const [content, setContent] = useState("");
+  const [ownerName, setOwnerName] = useState("");
+  const [repoName, setRepoName] = useState("");
 
+  const [isHelperOpen, setIsHelperOpen] = useState(false);
 
-
-
-
-
-  async function handleURLSubmit(){
+  async function handleURLSubmit() {
     // fetch details from github url here.
-    console.log("This URL is being sent by the user:", repoURL)
-    const url = new URL(repoURL)
-    const ownerName = url.pathname.split('/')[1]
-    console.log("Owner name:", ownerName)
-    const repoName = url.pathname.split('/')[2]
-    console.log('Repo name:', repoName)
+    console.log("This URL is being sent by the user:", repoURL);
+    const url = new URL(repoURL);
+    const ownerName = url.pathname.split("/")[1];
+    setOwnerName(ownerName);
+    console.log("Owner name:", ownerName);
+    const repoName = url.pathname.split("/")[2];
+    setRepoName(repoName);
+    console.log("Repo name:", repoName);
 
-    const repoData = await axios.get(`https://api.github.com/repos/${ownerName}/${repoName}`)
+    const repoData = await axios.get(
+      `https://api.github.com/repos/${ownerName}/${repoName}`
+    );
 
-    console.log("Data returned from github (Repo Metadata)", repoData)
+    console.log("Data returned from github (Repo Metadata)", repoData);
 
-    const recursiveFileTree = await axios.get(`https://api.github.com/repos/${ownerName}/${repoName}/git/trees/main?recursive=1`)
+    const recursiveFileTree = await axios.get(
+      `https://api.github.com/repos/${ownerName}/${repoName}/git/trees/main?recursive=1`
+    );
 
-    console.log("Returned file tree (branch main): ", recursiveFileTree.data.tree)
+    console.log(
+      "Returned file tree (branch main): ",
+      recursiveFileTree.data.tree
+    );
 
-    const formattedTree = buildFileTree(recursiveFileTree.data.tree)
+    const formattedTree = buildFileTree(recursiveFileTree.data.tree);
 
-    console.log("This is the formatted tree", formattedTree)
-    setFileTree(formattedTree)
-    setRepoURL('')
+    console.log("This is the formatted tree", formattedTree);
+    setFileTree(formattedTree);
+    setRepoURL("");
+  }
+
+  async function handleSelect(file: any) {
+    console.log("Some element has been selected:", file);
+
+    // only fetch if it's a file (GitHub marks them as blob)
+    if (!file.id.endsWith("/")) {
+      // fetch blob contents
+      const blobRes = await fetch(
+        `https://api.github.com/repos/${ownerName}/${repoName}/contents/${file.id}`
+      );
+      const blobData = await blobRes.json();
+
+      console.log("blobData", blobData);
+
+      // decode base64
+      const decoded = atob(blobData.content);
+
+      console.log("DecodedContent", decoded);
+
+      setContent(decoded);
+    }
   }
 
   return (
     <div>
       <div>Hello There, paste in a repo url below</div>
 
-      <form onSubmit={(e) => {
-             e.preventDefault()
-             handleURLSubmit()
-      }}>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleURLSubmit();
+        }}
+      >
         <div>Enter URL here:</div>
-        <input value={repoURL} onChange={(e) => {setRepoURL(e.target.value)}} type="text" required className="border py-2 px-2 rounded-md"/>
+        <input
+          value={repoURL}
+          onChange={(e) => {
+            setRepoURL(e.target.value);
+          }}
+          type="text"
+          required
+          className="border py-2 px-2 rounded-md"
+        />
         <button type="submit">Search</button>
-
-
       </form>
 
-
       <div>
-        {fileTree && fileTree.map(each => <div>{each.path}</div>)}
+        {fileTree && (
+          <ResizablePanelGroup
+            direction="horizontal"
+            className="h-[500px] w-screen min-w-screen"
+          >
+            <ResizablePanel
+              defaultSize={15}
+              className="border h-[500px]"
+              minSize={15}
+            >
+              <div>Panel 1 (FileTree)</div>
 
-        {fileTree && <FileTree
+              <div className="h-fit">
+                <FileTree
+                  elements={fileTree} // output of buildFileTree
+                  onSelect={(node: any) => handleSelect(node)}
+                />
+              </div>
+            </ResizablePanel>
+
+            <ResizableHandle withHandle />
+
+            <ResizablePanel defaultSize={69} minSize={50}>
+              <div>Panel 2 (file content)</div>
+
+              <div className="border mx-2 rounded-md ">
+                {!content && (
+                  <div className="text-center text-lg mt-20">
+                    Select a file to be opened here.
+                  </div>
+                )}
+
+                {content && (
+                  <SyntaxHighlighter
+                    language="typescript"
+                    style={oneDark}
+                    className="w-full h-full"
+                  >
+                    {content}
+                  </SyntaxHighlighter>
+                )}
+              </div>
+            </ResizablePanel>
+            <ResizableHandle withHandle />
+
+            <ResizablePanel defaultSize={15} minSize={15}>
+              <div>Panel 3</div>
+
+              <div className="border right-0 top-0 w-[400px] h-screen shadow-md border">
+                <div>
+                  <div className="px-4 py-4 w-2/3 bg-gray-100 rounded-xl mx-2">
+                    Hey there! Ask me anything you want about this repo.
+                  </div>
+                  This will be the chat window
+                </div>
+              </div>
+            </ResizablePanel>
+          </ResizablePanelGroup>
+        )}
+      </div>
+
+      {/* <div>
+
+        {fileTree && 
+        
+        
+        <div className="flex">
+
+           // this is resizable 1
+          <div className='max-w-[20%] w-[15%] sticky top-10 h-fit'>
+          <FileTree
   elements={fileTree} // output of buildFileTree
-  onSelect={(node) => {console.log("Some element has been selected", node)}}
-/>}
+  onSelect={(node: any) => handleSelect(node)}
+/>        
+        </div>
+
+
+// this will be resizable 2
+<div className='border mx-2 rounded-md w-[58%]'>
+
+      {!content && <div className='text-center text-lg mt-20'>Select a file to be opened here.</div>}
+
+        {content && <SyntaxHighlighter language="typescript" style={oneDark} className='w-full h-full'>
+              {content}
+          </SyntaxHighlighter>}
+</div>
+
+
+// this will be resizable 3
+<div className='border absolute right-0 top-0 w-[400px] h-screen shadow-md border'>
+    <div>
+      <div className="px-4 py-4 w-2/3 bg-gray-100 rounded-xl mx-2">Hey there! Ask me anything you want about this repo.</div>
+      This will be the chat window
+      </div>
+</div>
+
+<div>
+
+  <input type="text" className='border z-10 relative'/>
+</div>
+
+</div>} 
+
+
 
       </div>
+
+      */}
     </div>
   );
 }
-
-
